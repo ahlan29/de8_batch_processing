@@ -44,6 +44,18 @@ CREATE TABLE tb_vouchers (
 	PRIMARY KEY (voucher_id),
 	CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES tb_users (user_id)
 );
+
+
+CREATE TABLE dim_users (
+	user_id INT NOT NULL,
+	user_first_name VARCHAR(255) NOT NULL,
+	user_last_name VARCHAR(255) NOT NULL,
+	user_gender VARCHAR(50) NOT NULL,
+	user_address VARCHAR(255),
+	user_birthday DATE NOT NULL,
+	user_join DATE NOT NULL,
+	PRIMARY KEY (user_id)
+);
 	
 CREATE TABLE tb_orders (
 	order_id INT NOT NULL,
@@ -54,6 +66,24 @@ CREATE TABLE tb_orders (
 	order_price INT NOT NULL,
 	order_discount INT,
 	voucher_id INT NOT NULL,
+	order_total INT NOT NULL,
+	rating_id INT NOT NULL,
+	PRIMARY KEY (order_id),
+	CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES tb_users (user_id),
+	CONSTRAINT fk_payment_id FOREIGN KEY (payment_id) REFERENCES tb_payments (payment_id),
+	CONSTRAINT fk_shipper_id FOREIGN KEY (shipper_id) REFERENCES tb_shippers (shipper_id),
+	CONSTRAINT fk_rating_id FOREIGN KEY (rating_id) REFERENCES tb_ratings (rating_id)
+);
+
+CREATE TABLE fact_orders (
+	order_id INT NOT NULL,
+	order_date DATE NOT NULL,
+	user_id INT NOT NULL,
+	payment_id INT NOT NULL,
+	shipper_id INT NOT NULL,
+	order_price INT NOT NULL,
+	order_discount INT,
+	voucher_id INT,
 	order_total INT NOT NULL,
 	rating_id INT NOT NULL,
 	PRIMARY KEY (order_id),
